@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
 const authorSchema = new mongoose.Schema({
-  name: String
+  name: String,
+  required: true
 })
