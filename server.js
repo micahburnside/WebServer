@@ -7,6 +7,8 @@ const expressLayouts = require('express-ejs-layouts')
 // const dotenv = require('dotenv').config()
 require('dotenv').config()
 
+const bodyParser = require('body-parser')
+
 const indexRouter = require('./routes/index')
 const authorRouter = require('./routes/authors')
 
