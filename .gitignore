@@ -44,7 +44,7 @@ npm-debug.log
 .eslintcache
 
 # dotenv environment variables file
-.env*
+.env
 
 # Next.js build output
 .next
