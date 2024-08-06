@@ -8,8 +8,10 @@ router.get('/', (req, res) => {
 })
 
 //New Author Route
-router.post('/new', (req, res) => {
+router.get('/new', (req, res) => {
   res.render('authors/new')
 })
+
+
 
 module.exports = router
