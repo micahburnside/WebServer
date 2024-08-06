@@ -1,34 +1,31 @@
 const express = require('express')
 const router = express.Router()
 const Author = require('../models/author')
-const res = require("express/lib/response");
 
-//All Authors Route
+// All Authors Route
 router.get('/', (req, res) => {
   res.render('authors/index')
 })
 
-//New Author Route
+// New Author Route
 router.get('/new', (req, res) => {
   res.render('authors/new', { author: new Author() })
 })
 
-//Create Author Route
-router.post('/', (req, res) => {
+// Create Author Route
+router.post('/', async (req, res) => {
   const author = new Author({
     name: req.body.name
   })
-  author.save((err, newAuthor) => {
-    if (err) {
-      res.render('authors/new', {
-        author: author,
-        errorMessage: err.message,
-      })
-    } else {
-      // res.redirect(`authors/${newAuthor.id}`)
-      res.redirect(`authors`)
-    }
-  })
+  try {
+    await author.save()
+    res.redirect('authors')
+  } catch (err) {
+    res.render('authors/new', {
+      author: author,
+      errorMessage: 'error creating author'
+    })
+  }
 })
 
 module.exports = router
