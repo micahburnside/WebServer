@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
 // New Book Route
 router.get('/new', (req, res) => {
-  res.render('authors/new', { author: new Author(), errorMessage: null })
+
 })
 
 // Create Book Route
