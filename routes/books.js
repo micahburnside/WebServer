@@ -13,13 +13,16 @@ const upload = multer({
     callback(null, true)
   }
 })
-const {query} = require("express");
+// const {query} = require("express");
 
 // All Books Route
 router.get('/', async (req, res) => {
-  const query = Book.find()
+  let query = Book.find()
+  if (req.query.title != null && req.query.title != '') {
+    query = query.regex('title', new RegExp(req.query.title, 'i'))
+  }
   try {
-    const books = await Book.find({})
+    const books = await query.exec()
     res.render('books/index', {
       books: books,
       searchOptions: req.query
