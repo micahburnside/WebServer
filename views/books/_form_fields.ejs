@@ -1,4 +1,4 @@
-<label xmlns="http://www.w3.org/1999/html">Title</label>
+<label>Title</label>
 <input type="text" name="title" value="<%= book.title %>">
 <label>Author</label>
 <select name="author">
@@ -10,3 +10,7 @@
     <% } %>
 <% }) %>
 </select>
+<label>Publish Date</label>
+<input type="date" name="publishDate"
+       value="<%= book.publishDate == null ? '' :
+       book.publishDate.toISOString().split('T')[0] %>">
