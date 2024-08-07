@@ -17,6 +17,7 @@ const {query} = require("express");
 
 // All Books Route
 router.get('/', async (req, res) => {
+  const query = Book.find()
   try {
     const books = await Book.find({})
     res.render('books/index', {
