@@ -9,8 +9,12 @@ router.get('/', async (req, res) => {
 })
 
 // New Book Route
-router.get('/new', (req, res) => {
-  res.send('New Book')
+router.get('/new', async (req, res) => {
+  try {
+
+  } catch {
+
+  }
 })
 
 // Create Book Route
