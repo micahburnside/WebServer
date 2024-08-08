@@ -28,9 +28,9 @@ git clone git@github.com:micahburnside/WebServer.git
 npm install
 ```
 
-##### 3 - Start the server
+##### 3 - Start the dev server named 'devStart' 
 ```shell
-npm start
+npm run devStart
 ```
 
 ### Development
@@ -44,9 +44,3 @@ I am open to contributions. If you find a bug or want to propose a feature, feel
 ## License
 
 Our project is open source and maintained under a standard MIT license.
-
-## Contact
-
-If you're encountering problems, have suggestions or want to contribute, feel free to contact the maintainer:
-
-Email: [micahburnside@protonmail.com](mailto:micahburnside@protonmail.com)
