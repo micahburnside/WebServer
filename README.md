@@ -43,4 +43,4 @@ I am open to contributions. If you find a bug or want to propose a feature, feel
 
 ## License
 
-Our project is open source and maintained under a standard MIT license.
+This project is open source and maintained under a standard MIT license.
