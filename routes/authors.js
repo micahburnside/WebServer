@@ -43,4 +43,8 @@ router.get('/:id', async (req, res) => {
   res.send('Show Author' + req.params.id)
 })
 
+router.get('/:id/edit', async (req, res) => {
+  res.send('Edit Author' + req.params.id)
+})
+
 module.exports = router
