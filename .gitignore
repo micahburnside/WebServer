@@ -54,6 +54,3 @@ npm-debug.log
 
 # MacOS file
 .DS_Store
-
-# Multer added files until sent to database
-/public/uploads/bookCovers/*
