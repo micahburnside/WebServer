@@ -1,18 +1,17 @@
 const express = require('express')
 const router = express.Router()
-const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 const Book = require('../models/book')
 const uploadPath = path.join('public', Book.coverImageBasePath)
 const Author = require('../models/author')
-const imageMimeTypes = ['images/jpeg', 'images/png', 'images/gif']
-const upload = multer({
-  dest: uploadPath,
-  fileFilter: (req, file, callback) => {
-    callback(null, true)
-  }
-})
+// const imageMimeTypes = ['images/jpeg', 'images/png', 'images/gif']
+// const upload = multer({
+//   dest: uploadPath,
+//   fileFilter: (req, file, callback) => {
+//     callback(null, true)
+//   }
+// })
 // const {query} = require("express");
 
 // All Books Route
@@ -55,6 +54,7 @@ router.post('/', async (req, res) => {
     coverImageName: fileName,
     description: req.body.description
   })
+  saveCover(book, req.body.cover)
   try {
     const newBook = await book.save()
     // res.redirect(`books/${newBook.id}`)
@@ -85,6 +85,10 @@ async function renderNewPage(res, book, hasError = false) {
   } catch {
     res.redirect('/books')
   }
+}
+
+function saveCover(book, coverEncoded) {
+
 }
 
 module.exports = router
