@@ -7,7 +7,7 @@ const res = require("express/lib/response");
 // All Authors Route
 router.get('/', async (req, res) => {
 let searchOptions = {}
-  if(req.query.name != null && query.name !== ''){
+  if(req.query.name != null && req.query.name !== ''){
     searchOptions.name = new RegExp(req.query.name, 'i')
   }
   let authors = [];
@@ -33,15 +33,15 @@ router.post('/', async (req, res) => {
   })
   try {
     const newAuthor = await author.save()
-    res.redirect(`authors/${newAuthor.id}`)
-    res.redirect('authors')
+    res.redirect(`authors/${newAuthor.id}`) // First response
+    res.redirect('authors') // Second response
   } catch (err) {
-    res.render('authors/new', { author: author, errorMessage: 'Error creating Author' })
+    res.render('authors/new', { author: author, errorMessage: 'Error creating Author' }) // Possible third response if error occurs during author.save
   }
 })
 
 router.get('/:id',  (req, res) => {
-  res.send('Show Author' + req.params.id)
+  res.send('Show Author ' + req.params.id)
 })
 
 router.get('/:id/edit',  async (req, res) => {
@@ -72,9 +72,13 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-router.delete('/:id',  async (req, res) => {
+router.delete('/:id', async (req, res) => {
   let author
   try {
+    const books = await Book.find({ author: req.params.id }).limit(1).exec()
+    if (books.length > 0) {
+      return res.status(400).send({ errorMessage: 'Cannot delete. Author has associated books.' });
+    }
     author = await Author.findById(req.params.id)
     await author.remove()
     res.redirect('/authors')
