@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Author = require('../models/author')
 const {query} = require("express");
+const res = require("express/lib/response");
 
 // All Authors Route
 router.get('/', async (req, res) => {
@@ -30,9 +31,9 @@ router.post('/', async (req, res) => {
   const author = new Author({
     name: req.body.name
   })
-
   try {
-    await author.save()
+    const newAuthor = await author.save()
+    res.redirect(`authors/${newAuthor.id}`)
     res.redirect('authors')
   } catch (err) {
     res.render('authors/new', { author: author, errorMessage: 'Error creating Author' })
@@ -52,8 +53,22 @@ router.get('/:id/edit',  async (req, res) => {
   }
 })
 
-router.put('/:id',  (req, res) => {
-  res.send('Update Author' + req.params.id)
+router.put('/:id', async (req, res) => {
+  let author
+  try {
+    author = await Author.findById(req.params.id)
+    await author.save()
+    res.redirect(`/authors/${author.id}`)
+  } catch (err) {
+    if (author == null) {
+      res.redirect('/')
+    } else {
+      res.render('authors/new', {
+        author: author,
+        errorMessage: 'Error updating Author'
+      })
+    }
+  }
 })
 
 router.delete('/:id',  (req, res) => {
