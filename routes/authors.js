@@ -75,18 +75,22 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   let author
   try {
-    const books = await Book.find({ author: req.params.id }).limit(1).exec()
-    if (books.length > 0) {
-      return res.status(400).send({ errorMessage: 'Cannot delete. Author has associated books.' });
-    }
     author = await Author.findById(req.params.id)
+    if (author == null) {
+      return res.redirect('/')
+    }
+    const books = await Book.find({ author: author.id }).limit(1).exec()
+    if (books.length > 0) {
+      return res.redirect(`/authors/${author.id}`);
+    }
     await author.remove()
     res.redirect('/authors')
-  } catch {
-    if (author == null) {
-      res.redirect('/')
-    } else {
+  } catch (err) {
+    console.log(err)
+    if (author != null) {
       res.redirect(`/authors/${author.id}`)
+    } else {
+      res.redirect('/')
     }
   }
 })
