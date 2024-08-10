@@ -4,6 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const Book = require('../models/book');
 const Author = require('../models/author');
+const req = require("express/lib/request");
+const console = require("node:console");
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
 
 // All Books Route
@@ -94,6 +96,28 @@ router.put('/:id', async (req, res) => {
     }
   }
 });
+
+router.delete('/:id', async (req, res) => {
+  let book;
+  try {
+    book = await Book.findByIdAndDelete(req.params.id);
+    if (!book) {  // Check if book exists
+      res.status(404).json({ message: 'Cannot find book' });
+    } else {
+      res.redirect('/books');
+    }
+  } catch (err) {
+    console.log(err);  // Log the error
+    if (book != null) {
+      res.render('books/show', {
+        book: book,
+        errorMessage: 'Could not remove book'
+      })
+    } else {
+      res.redirect('/');
+    }
+  }
+})
 
 async function renderNewPage(res, book, hasError = false) {
   renderFormPage(res, book, 'new', hasError)
