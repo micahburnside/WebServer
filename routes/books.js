@@ -54,11 +54,12 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const book = await Book.findById(req.params.id).populate('author').exec()
     res.render('books/show', { book: book })
-  } catch {
+  } catch (err) {
+    console.error(err);
     res.redirect('/');
   }
 })
