@@ -3,7 +3,7 @@ const router = express.Router()
 const Author = require('../models/author')
 const {query} = require("express");
 const res = require("express/lib/response");
-
+const Book = require("../models/book");
 // All Authors Route
 router.get('/', async (req, res) => {
 let searchOptions = {}
@@ -40,8 +40,17 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.get('/:id',  (req, res) => {
-  res.send('Show Author ' + req.params.id)
+router.get('/:id', async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id)
+    const books = await Book.find({ author: author.id }).limit(6).exec()
+    res.render('authors/show', {
+      author: author,
+      booksByAuthor: books
+    })
+  } catch {
+    res.redirect('/')
+  }
 })
 
 router.get('/:id/edit',  async (req, res) => {
@@ -72,6 +81,29 @@ router.put('/:id', async (req, res) => {
   }
 })
 
+// router.delete('/:id', async (req, res) => {
+//   let author
+//   try {
+//     author = await Author.findById(req.params.id)
+//     if (author == null) {
+//       return res.redirect('/')
+//     }
+//     const books = await Book.find({ author: author.id }).limit(1).exec()
+//     if (books.length > 0) {
+//       return res.redirect(`/authors/${author.id}`);
+//     }
+//     await author.remove()
+//     res.redirect('/authors')
+//   } catch (err) {
+//     console.log(err)
+//     if (author != null) {
+//       res.redirect(`/authors/${author.id}`)
+//     } else {
+//       res.redirect('/')
+//     }
+//   }
+// })
+
 router.delete('/:id', async (req, res) => {
   let author
   try {
@@ -83,7 +115,7 @@ router.delete('/:id', async (req, res) => {
     if (books.length > 0) {
       return res.redirect(`/authors/${author.id}`);
     }
-    await author.remove()
+    await Author.findByIdAndDelete(author.id)
     res.redirect('/authors')
   } catch (err) {
     console.log(err)
