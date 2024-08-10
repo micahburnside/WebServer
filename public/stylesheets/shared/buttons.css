@@ -17,6 +17,5 @@
 
 .btn-primary {
     color: var(--color-btn-primary-text);
-    backgound-color: var(--color-btn-primary-background);
-
+    background-color: var(--color-btn-primary-background);
 }
