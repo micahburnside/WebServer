@@ -32,6 +32,10 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/new', async(req, res) => {
+  renderNewPage(res, new Book())
+})
+
 // Create Book Route
 router.post('/', async (req, res) => {
   const book = new Book({
