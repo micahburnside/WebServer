@@ -2,11 +2,12 @@ const express = require('express')
 const router = express.Router()
 const Author = require('../models/author')
 const {query} = require("express");
-
+const res = require("express/lib/response");
+const Book = require("../models/book");
 // All Authors Route
 router.get('/', async (req, res) => {
 let searchOptions = {}
-  if(req.query.name != null && query.name !== ''){
+  if(req.query.name != null && req.query.name !== ''){
     searchOptions.name = new RegExp(req.query.name, 'i')
   }
   let authors = [];
@@ -30,12 +31,99 @@ router.post('/', async (req, res) => {
   const author = new Author({
     name: req.body.name
   })
-
   try {
-    await author.save()
-    res.redirect('authors')
+    const newAuthor = await author.save()
+    res.redirect(`authors/${newAuthor.id}`) // First response
+    res.redirect('authors') // Second response
   } catch (err) {
-    res.render('authors/new', { author: author, errorMessage: 'Error creating Author' })
+    res.render('authors/new', { author: author, errorMessage: 'Error creating Author' }) // Possible third response if error occurs during author.save
+  }
+})
+
+router.get('/:id', async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id)
+    const books = await Book.find({ author: author.id }).limit(6).exec()
+    res.render('authors/show', {
+      author: author,
+      booksByAuthor: books
+    })
+  } catch {
+    res.redirect('/')
+  }
+})
+
+router.get('/:id/edit',  async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id)
+    res.render('authors/edit', { author: author })
+  } catch {
+    res.redirect('/authors')
+  }
+})
+
+router.put('/:id', async (req, res) => {
+  let author
+  try {
+    author = await Author.findById(req.params.id)
+    author.name = req.body.name
+    await author.save()
+    res.redirect(`/authors/${author.id}`)
+  } catch (err) {
+    if (author == null) {
+      res.redirect('/')
+    } else {
+      res.render('authors/new', {
+        author: author,
+        errorMessage: 'Error updating Author'
+      })
+    }
+  }
+})
+
+// router.delete('/:id', async (req, res) => {
+//   let author
+//   try {
+//     author = await Author.findById(req.params.id)
+//     if (author == null) {
+//       return res.redirect('/')
+//     }
+//     const books = await Book.find({ author: author.id }).limit(1).exec()
+//     if (books.length > 0) {
+//       return res.redirect(`/authors/${author.id}`);
+//     }
+//     await author.remove()
+//     res.redirect('/authors')
+//   } catch (err) {
+//     console.log(err)
+//     if (author != null) {
+//       res.redirect(`/authors/${author.id}`)
+//     } else {
+//       res.redirect('/')
+//     }
+//   }
+// })
+
+router.delete('/:id', async (req, res) => {
+  let author
+  try {
+    author = await Author.findById(req.params.id)
+    if (author == null) {
+      return res.redirect('/')
+    }
+    const books = await Book.find({ author: author.id }).limit(1).exec()
+    if (books.length > 0) {
+      return res.redirect(`/authors/${author.id}`);
+    }
+    await Author.findByIdAndDelete(author.id)
+    res.redirect('/authors')
+  } catch (err) {
+    console.log(err)
+    if (author != null) {
+      res.redirect(`/authors/${author.id}`)
+    } else {
+      res.redirect('/')
+    }
   }
 })
 
