@@ -62,6 +62,8 @@ router.get('/:id', async (req, res) => {
     res.render('books/show', { book: book })
   } catch (err) {
     console.error(err);
+    console.log(book); // Add this line
+
     res.redirect('/');
   }
 })
