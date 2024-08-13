@@ -3,7 +3,7 @@
 Welcome aboard! This is the WebServer Project, an efficient and robust web server developed utilizing Node.js, Express, and MongoDB technologies.
 ## Overview
 
-WriterSide Server is a part of WriterSide project that serves data through RESTful API. It runs on Node.js and uses the Express framework to handle HTTP requests to interact with MongoDB database.
+WebServer is a project that serves data through RESTful API. It runs on Node.js and uses the Express framework to handle HTTP requests to interact with MongoDB database.
 
 ## Getting Started
 
@@ -17,7 +17,7 @@ WriterSide Server is a part of WriterSide project that serves data through RESTf
 ##### 1 - Clone the repo
 HTTP
 ```shell
-git clone https://github.com/Your-Username/writerside-server.git
+git clone https://github.com/micahburnside/WebServer.git
 ```
 SSH
 ```shell
